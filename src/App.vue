@@ -1,6 +1,6 @@
 <template>
   <div id="playGroud">
-    <audio ref="music" src="./assets/bgm.mp3" loop></audio>
+    <audio ref="music" :src="musicSrc" loop></audio>
     <h1 v-if="level !== '' && showHappy == false">{{LEVEL_NAME[level]}}</h1>
     <div class="levelContent">
       <div v-if="level === ''">加载中，请稍候……</div>
@@ -16,7 +16,7 @@
           （据说笨蛋在5分钟之内无法通关）
         </div>
         <div>
-          <img @click="nextLevel()" style="cursor:pointer;margin-top: 100px;width: 20%" src="./assets/xiaoxi/alert.gif"
+          <img @click="nextLevelFirst()" style="cursor:pointer;margin-top: 100px;width: 20%" src="./assets/xiaoxi/alert.gif"
             alt="">
         </div>
       </div>
@@ -31,7 +31,7 @@
       </div>
       <!-- 第三关 -->
       <div v-if="level === 3">
-        <div style="font-size: 30px;display: flex;align-items: center">给小希发红包，发<input class="level3Input"
+        <div class="level3Text" style="display: flex;align-items: center">给小希发红包，发<input class="level3Input"
             @input="checkLevel3Input" v-model="level3Input" />元就够了</div>
       </div>
       <!-- 第四关 -->
@@ -109,7 +109,7 @@
   visibility: showStaff?'visible':'hidden'
 }" class="checkBtn" style="margin: 20px 0;font-size: 20px;" @click="reset()">重玩</button></div>
             <div v-html="`制作人：琛琛
-页面设计：XX XX 
+页面设计：不忘那抹天蓝 Sicro 
 创意协力：XX XX XX XX 
 XX XX XX XX XX XX XX
 测试协力： XX XX XX XX 
@@ -165,6 +165,8 @@ XX XX XX XX XX XX
 export default {
   name: 'App',
     data() { return {
+      musicSrc: require("./assets/bgm.mp3"),
+
       level: "",
       LEVEL_NAME,
       LEVEL_TIPS,
@@ -248,6 +250,12 @@ export default {
         location.hash = this.level;
       },
 
+      nextLevelFirst() {
+        this.$refs.music.volume = 0.2;
+        this.$refs.music.play();
+
+        this.nextLevel();
+      },
       nextLevel() {
         this.levelImg = false
         this.level++
@@ -292,7 +300,8 @@ export default {
           }
           catch(e) {
             console.log(e);
-            alert("求求你，给一下剪贴板权限好不好~")
+            alert("求求你，给一下剪贴板权限好不好~，嘛，不给就算了，下一关吧")
+            this.levelImg = true;
           }
         }, 1000);
       },
@@ -327,8 +336,6 @@ export default {
       }
     },
     mounted() {
-      this.$refs.music.volume = 0.2;
-      this.$refs.music.play();
       this.level = Number(location.hash.replace("#", "")) || 0;
 
       // if (window.innerHeight > window.innerWidth) {
@@ -380,12 +387,18 @@ export default {
         width: 90vw;
         font-size: 15px;
     }
+    .level3Text {
+      font-size: 20px;
+    }
   }
 
   @media screen and (orientation: landscape) {
       #playGroud {
         height: 100vh;
         width: 133vh;
+      }
+      .level3Text {
+        font-size: 30px;
       }
   }
 
