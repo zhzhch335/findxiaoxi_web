@@ -191,6 +191,8 @@ export default {
       showHappy: false,
       blessing: "",
       showStaff: false,
+
+      direction: window.orientation
     }
     },
     watch: {
@@ -328,6 +330,10 @@ export default {
       this.$refs.music.volume = 0.2;
       this.$refs.music.play();
       this.level = Number(location.hash.replace("#", "")) || 0;
+
+      // if (window.innerHeight > window.innerWidth) {
+      //   document.getElementsByTagName("html")[0].style.transform = "rotate(90deg)"
+      // }
     }
 }
 </script>
@@ -338,8 +344,17 @@ export default {
     src: url("./assets/JinTianYunDuoYouDianTian-2.ttf");
   }
 
+  html {
+    background: #8ea1d0;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #8ea1d0, #fff);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #8ea1d0, #fff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+
   html,
   body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     font-family: "yunduo";
     height: 100%;
@@ -347,14 +362,10 @@ export default {
     padding: 0;
     overflow: hidden;
     font-size: 20px;
-    background: #8ea1d0;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to left, #8ea1d0, #fff);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to left, #8ea1d0, #fff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
   }
 
   #playGroud {
-    height: 100vh;
-    width: 133vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -362,6 +373,22 @@ export default {
     color: black;
     margin: auto;
   }
+
+  @media screen and (orientation: portrait) {
+    #playGroud {
+        height: 67.5vw;
+        width: 90vw;
+        font-size: 15px;
+    }
+  }
+
+  @media screen and (orientation: landscape) {
+      #playGroud {
+        height: 100vh;
+        width: 133vh;
+      }
+  }
+
 
 
   .xiInput {
